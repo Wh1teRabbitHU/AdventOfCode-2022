@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"utils"
 )
 
-const inputPath string = "day01/input.txt"
+const inputPath string = "inputs/day01.txt"
 
 type TopCalories struct {
 	first  int64
@@ -39,16 +40,10 @@ func assignNewCalorie(topCalories *TopCalories, newCalorie int64) {
 	}
 }
 
-func handleError(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
 func Solve() {
 	inputFile, err := os.Open(inputPath)
 
-	handleError(err)
+	utils.HandleError(err)
 	defer inputFile.Close()
 
 	fileScanner := bufio.NewScanner(inputFile)
@@ -66,7 +61,7 @@ func Solve() {
 			currentCounter = 0
 		} else {
 			calorie, err := strconv.ParseInt(line, 0, 0)
-			handleError(err)
+			utils.HandleError(err)
 
 			currentCounter += calorie
 		}
