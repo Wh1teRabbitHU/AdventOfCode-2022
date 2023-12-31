@@ -16,6 +16,14 @@ type AssignmentRange struct {
 	end   int
 }
 
+func (r *AssignmentRange) partlyOverlap(other *AssignmentRange) bool {
+	if r.start <= other.end && r.end >= other.start {
+		return true
+	}
+
+	return false
+}
+
 func (r *AssignmentRange) fullyOverlap(other *AssignmentRange) bool {
 	if r.start >= other.start && r.end <= other.end {
 		return true
@@ -56,20 +64,25 @@ func Solve() {
 	fileScanner := bufio.NewScanner(inputFile)
 	fileScanner.Split(bufio.ScanLines)
 
-	overlapCounter := 0
+	partlyOverlapCounter := 0
+	fullyOverlapCounter := 0
 
 	for fileScanner.Scan() {
 		line := fileScanner.Text()
 		rangePairs := strings.Split(line, ",")
 		range1, range2 := resolveRanges(rangePairs)
 
+		if range1.partlyOverlap(&range2) {
+			partlyOverlapCounter++
+		}
+
 		if range1.fullyOverlap(&range2) {
-			overlapCounter++
+			fullyOverlapCounter++
 		}
 	}
 
 	fmt.Print("Day 04 - Solution 01: ")
-	fmt.Println(overlapCounter)
+	fmt.Println(fullyOverlapCounter)
 	fmt.Print("Day 04 - Solution 02: ")
-	fmt.Println("???")
+	fmt.Println(partlyOverlapCounter)
 }
