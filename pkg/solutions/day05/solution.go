@@ -36,7 +36,7 @@ func initCargo(cargo *[][]string, initData *[]string) {
 	}
 }
 
-func moveCrates(cargo *[][]string, rawData string) {
+func moveCrates(cargo *[][]string, rawData string, oldCrane bool) {
 	commandParts := strings.Split(rawData, " ")
 	pieceCount, err := strconv.Atoi(commandParts[1])
 
@@ -55,10 +55,18 @@ func moveCrates(cargo *[][]string, rawData string) {
 	pieces := (*cargo)[from][len((*cargo)[from])-pieceCount : len((*cargo)[from])]
 	(*cargo)[from] = (*cargo)[from][:len((*cargo)[from])-pieceCount]
 
-	for i := len(pieces) - 1; i >= 0; i-- {
-		piece := pieces[i]
+	if oldCrane {
+		for i := len(pieces) - 1; i >= 0; i-- {
+			piece := pieces[i]
 
-		(*cargo)[to] = append((*cargo)[to], piece)
+			(*cargo)[to] = append((*cargo)[to], piece)
+		}
+	} else {
+		for i := 0; i < len(pieces); i++ {
+			piece := pieces[i]
+
+			(*cargo)[to] = append((*cargo)[to], piece)
+		}
 	}
 }
 
@@ -81,7 +89,8 @@ func Solve() {
 	fileScanner := bufio.NewScanner(inputFile)
 	fileScanner.Split(bufio.ScanLines)
 
-	cargo := make([][]string, 0)
+	cargo9000 := make([][]string, 0)
+	cargo9001 := make([][]string, 0)
 	initData := make([]string, 0)
 	initStage := true
 
@@ -89,7 +98,8 @@ func Solve() {
 		line := fileScanner.Text()
 
 		if len(line) == 0 {
-			initCargo(&cargo, &initData)
+			initCargo(&cargo9000, &initData)
+			initCargo(&cargo9001, &initData)
 			initStage = false
 
 			continue
@@ -100,14 +110,16 @@ func Solve() {
 				initData = append(initData, line)
 			}
 		} else {
-			moveCrates(&cargo, line)
+			moveCrates(&cargo9000, line, true)
+			moveCrates(&cargo9001, line, false)
 		}
 	}
 
-	topCrates := gatherTopCrates(&cargo)
+	topCrates9000 := gatherTopCrates(&cargo9000)
+	topCrates9001 := gatherTopCrates(&cargo9001)
 
 	fmt.Print("Day 05 - Solution 01: ")
-	fmt.Println(topCrates)
+	fmt.Println(topCrates9000)
 	fmt.Print("Day 05 - Solution 02: ")
-	fmt.Println("???")
+	fmt.Println(topCrates9001)
 }
