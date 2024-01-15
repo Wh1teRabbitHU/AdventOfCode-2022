@@ -9,7 +9,7 @@ import (
 	"utils"
 )
 
-const inputPath string = "inputs/day04.txt"
+const inputPath string = "../inputs/day04.txt"
 
 type AssignmentRange struct {
 	start int

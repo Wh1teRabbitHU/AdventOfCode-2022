@@ -7,7 +7,7 @@ import (
 	"utils"
 )
 
-const inputPath string = "inputs/day03.txt"
+const inputPath string = "../inputs/day03.txt"
 
 func findSharedGift(aGifts []rune, bGifts []rune) rune {
 	for _, aGift := range aGifts {

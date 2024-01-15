@@ -7,7 +7,7 @@ import (
 	"utils"
 )
 
-const inputPath string = "inputs/day02.txt"
+const inputPath string = "../inputs/day02.txt"
 
 const (
 	Rock         = "Rock"

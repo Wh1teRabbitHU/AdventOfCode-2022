@@ -8,7 +8,7 @@ import (
 	"utils"
 )
 
-const inputPath string = "inputs/day01.txt"
+const inputPath string = "../inputs/day01.txt"
 
 type TopCalories struct {
 	first  int64
