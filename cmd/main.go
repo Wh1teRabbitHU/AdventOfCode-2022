@@ -6,6 +6,7 @@ import (
 	"day03"
 	"day04"
 	"day05"
+	"day06"
 )
 
 func main() {
@@ -14,4 +15,5 @@ func main() {
 	day03.Solve()
 	day04.Solve()
 	day05.Solve()
+	day06.Solve()
 }
