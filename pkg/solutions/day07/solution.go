@@ -3,6 +3,7 @@ package day07
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -12,6 +13,8 @@ import (
 )
 
 const inputPath string = "../inputs/day07.txt"
+const totalDiskCapacity int = 70000000
+const neededSpace int = 30000000
 
 type FsFolder struct {
 	name    string
@@ -118,16 +121,33 @@ func interpretCommand(fileScanner *bufio.Scanner, rootFolder *FsFolder, currentF
 	return currentFolder, "", false
 }
 
-func findFolders(rootFolder *FsFolder) int {
+func smallFolderSizeSum(rootFolder *FsFolder) int {
 	sizeSum := 0
 
 	for _, f := range rootFolder.subFolders(true) {
-		if f.size() < 100000 {
-			sizeSum += f.size()
+		folderSize := f.size()
+
+		if folderSize < 100000 {
+			sizeSum += folderSize
 		}
 	}
 
 	return sizeSum
+}
+
+func findDeletableFolderSize(rootFolder *FsFolder) int {
+	minDeletableSize := rootFolder.size() - (totalDiskCapacity - neededSpace)
+	size := math.MaxInt64
+
+	for _, f := range rootFolder.subFolders(true) {
+		folderSize := f.size()
+
+		if folderSize > minDeletableSize && folderSize < size {
+			size = folderSize
+		}
+	}
+
+	return size
 }
 
 func Solve() {
@@ -153,10 +173,11 @@ func Solve() {
 		}
 	}
 
-	directorySizeSum := findFolders(&rootFolder)
+	folderSizeSum := smallFolderSizeSum(&rootFolder)
+	deletableFolderSize := findDeletableFolderSize(&rootFolder)
 
 	fmt.Print("Day 07 - Solution 01: ")
-	fmt.Println(directorySizeSum)
+	fmt.Println(folderSizeSum)
 	fmt.Print("Day 07 - Solution 02: ")
-	fmt.Println("???")
+	fmt.Println(deletableFolderSize)
 }
