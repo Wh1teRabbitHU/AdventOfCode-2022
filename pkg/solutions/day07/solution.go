@@ -34,6 +34,20 @@ func (inst *FsFolder) size() int {
 	return sizeSum
 }
 
+func (inst *FsFolder) subFolders(recursive bool) []*FsFolder {
+	folders := make([]*FsFolder, 0)
+
+	for _, f := range inst.folders {
+		folders = append(folders, f)
+
+		if recursive {
+			folders = append(folders, f.subFolders(true)...)
+		}
+	}
+
+	return folders
+}
+
 type FsFile struct {
 	name string
 	size int
@@ -104,6 +118,18 @@ func interpretCommand(fileScanner *bufio.Scanner, rootFolder *FsFolder, currentF
 	return currentFolder, "", false
 }
 
+func findFolders(rootFolder *FsFolder) int {
+	sizeSum := 0
+
+	for _, f := range rootFolder.subFolders(true) {
+		if f.size() < 100000 {
+			sizeSum += f.size()
+		}
+	}
+
+	return sizeSum
+}
+
 func Solve() {
 	inputFile, err := os.Open(inputPath)
 
@@ -127,8 +153,10 @@ func Solve() {
 		}
 	}
 
+	directorySizeSum := findFolders(&rootFolder)
+
 	fmt.Print("Day 07 - Solution 01: ")
-	fmt.Println("???")
+	fmt.Println(directorySizeSum)
 	fmt.Print("Day 07 - Solution 02: ")
 	fmt.Println("???")
 }
